@@ -15,15 +15,13 @@ import com.example.madassignment1.data.Animal
 import com.example.madassignment1.activities.DetailActivity
 
 @Composable
-fun AnimalListItem(animals: Animal, context: Context) {
-    Row (
-        modifier = Modifier.fillMaxSize().clickable {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra("animal", animals.name)
-                context.startActivity(intent)
-        }
+fun AnimalListItem(animal: Animal, onClick: () -> Unit){
+    Text(
+        text = animal.name,
+        modifier = Modifier
+            .clickable(onClick = onClick)
             .padding(16.dp)
-    ) {
-        Text(text = animals.name, style = MaterialTheme.typography.bodySmall)
-    }
+    )
 }
+
+

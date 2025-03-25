@@ -15,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.madassignment1.components.ButtonComponent
 import com.example.madassignment1.components.TopBar
+import com.example.madassignment1.data.Animal
 import com.example.madassignment1.data.Repository
 
 
@@ -23,35 +25,38 @@ class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val animalName = intent.getStringExtra("animalName")
-        val animal = Repository.AnimalList.find { it.name == animalName }
-
+        val animal = if (animalName != null) {
+            Repository.AnimalList.find { it.name == animalName }
+        } else
+        {null
+        }
         setContent {
             DetailScreen(animal)
         }
     }
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    fun DetailScreen(animal: com.example.madassignment1.data.Animal?) {
+    fun DetailScreen(animal: Animal?) {
         Scaffold(
-            topBar = { TopBar(title = "Animal Details") },
-            content = {
-                if (animal != null) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(text = "Name: ${animal.name}", style = MaterialTheme.typography.displaySmall)
-                        Text(text = "Species: ${animal.species}")
-                        Text(text = "Color: ${animal.color}")
-                        Text(text = "Type: ${animal.type}")
-                        Spacer(modifier = Modifier.height(20.dp))
+            topBar = {
+                TopBar(title = "Animal Details", onBackClick = { finish() })
+            },
+        ) { innerPadding ->
+            if (animal != null) {
+                Column(modifier = Modifier.padding(innerPadding).padding(8.dp)) {
+                    Text(text = "Name: ${animal.name}")
+                    Text(text = "Species: ${animal.species}")
+                    Text(text = "Color: ${animal.color}")
+                    Text(text = "Type: ${animal.type}")
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                        Button(onClick = { finish() }) {
-                            Text("Back")
-                        }
-                    }
-                } else {
-                    Text(text = "Animal not found", modifier = Modifier.padding(16.dp))
+                    ButtonComponent(onClick = { finish() }, text = "Back")
                 }
+            } else
+            // error handling if animal is null or not found
+            {
+                Text(text = "Animal not found", modifier = Modifier.padding(innerPadding).padding(16.dp))
             }
-        )
+        }
     }
 }
