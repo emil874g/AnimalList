@@ -50,7 +50,6 @@ class DetailActivity : ComponentActivity() {
                     Text(text = "Type: ${animal.type}")
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    ButtonComponent(onClick = { finish() }, text = "Back")
                 }
             } else
             // error handling if animal is null or not found
